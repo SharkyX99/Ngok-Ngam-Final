@@ -19,41 +19,40 @@
         <span lang="th">งอกงาม</span>
       </div>
       <div class="nav-links">
-        <a href="#about" class="active">
+        <a href="#hero" data-section="hero">
           <span lang="en">Home</span>
           <span lang="th">หน้าแรก</span>
         </a>
-        <a href="#benefits">
+        <a href="#benefits" data-section="benefits">
           <span lang="en">Benefits</span>
           <span lang="th">ประโยชน์</span>
         </a>
-        <a href="#products">
+        <a href="#products" data-section="products">
           <span lang="en">Products</span>
           <span lang="th">สินค้า</span>
         </a>
-        <a href="#contact">
+        <a href="#contact" data-section="contact">
           <span lang="en">Contact</span>
           <span lang="th">ติดต่อ</span>
         </a>
       </div>
       <div class="language-switch">
-  <button class="lang-btn active" data-lang="en">
-    <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="English" width="24">
-  </button>
-  <button class="lang-btn active" data-lang="th">
-    <img src="https://cdn.countryflags.com/thumbs/thailand/flag-400.png" alt="English" width="24">
-  </button>
-</div>
-
+        <button class="lang-btn active" data-lang="en">
+          <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="English" width="24">
+        </button>
+        <button class="lang-btn active" data-lang="th">
+          <img src="https://cdn.countryflags.com/thumbs/thailand/flag-400.png" alt="Thai" width="24">
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section id="hero" class="hero">
       <div class="container">
         <h1>
           <span class="main-title" lang="en">Premium Thai Fermented Rice</span>
-          <span class="main-title" lang="th">ข้าวหมากคุณภาพสูง</span>
+          <span class="main-title" lang="th">ข้าวหมากเกรดพรีเมี่ยม</span>
         </h1>
         <p class="tagline">
           <span lang="en">Nature's Probiotic Superfood</span>
@@ -66,7 +65,6 @@
       </div>
     </section>
     
-
     <section id="about" class="about">
       <div class="container">
         <h2>
@@ -186,7 +184,7 @@
               <a href="tel:0832070386">083-207-0386</a>
             </p>
             
-            <p lang="en">Available at <strong>Top Market</strong> and <strong>Rim Ping Supermarket</strong></p>
+            <p lang="en">Available at <strong>Tops Market</strong> and <strong>Rim Ping Supermarket</strong></p>
             <p lang="th">มีจำหน่ายที่ <strong>ท็อปมาร์เก็ต</strong> และ <strong>ริมปิงซุปเปอร์มาร์เก็ต</strong></p>
             
             <p lang="en">We accept custom orders for both retail and wholesale customers.</p>
@@ -203,15 +201,15 @@
               <span lang="en">Chat with us on LINE</span>
               <span lang="th">แชทกับเราทางไลน์</span>
             </a>
-            </div>
+            
             <div class="social-links">
-        <a href="https://www.facebook.com/nuttanawat.manakit" target="_blank" class="facebook-link">
-          <i class="fab fa-facebook-f"></i> Facebook
-        </a>
-        <a href="https://www.instagram.com/wa.nmk/" target="_blank" class="instagram-link">
-          <i class="fab fa-instagram"></i> Instagram
-        </a>
-      </div>
+              <a href="https://www.facebook.com/nuttanawat.manakit" target="_blank" class="facebook-link">
+                <i class="fab fa-facebook-f"></i> Facebook
+              </a>
+              <a href="https://www.instagram.com/wa.nmk/" target="_blank" class="instagram-link">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -244,7 +242,6 @@
             <span lang="th">ติดต่อ</span>
           </a>
         </div>
-        
       </div>
       
       <div class="copyright">
@@ -254,8 +251,8 @@
   </footer>
 
   <script>
-    // Simple language switcher
     document.addEventListener('DOMContentLoaded', function() {
+      // Language switcher
       const langButtons = document.querySelectorAll('.lang-btn');
       
       langButtons.forEach(button => {
@@ -282,8 +279,56 @@
         });
       });
       
-      // Set initial language to English
+      // Navigation active state management
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const sections = document.querySelectorAll('section');
+      
+      // Function to update active navigation
+      function updateActiveNav() {
+        let current = '';
+        const scrollY = window.pageYOffset;
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 100; // Account for navbar height
+          const sectionHeight = section.offsetHeight;
+          
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            current = section.id;
+          }
+        });
+        
+        // Special case for hero section (top of page)
+        if (scrollY < 200) {
+          current = 'hero';
+        }
+        
+        // Update active class
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          const targetSection = link.getAttribute('data-section') || link.getAttribute('href').substring(1);
+          
+          if (targetSection === current) {
+            link.classList.add('active');
+          }
+        });
+      }
+      
+      // Add scroll event listener
+      window.addEventListener('scroll', updateActiveNav);
+      
+      // Add click event listeners to nav links
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Remove active from all links
+          navLinks.forEach(l => l.classList.remove('active'));
+          // Add active to clicked link
+          this.classList.add('active');
+        });
+      });
+      
+      // Set initial language to English and initial nav state
       document.querySelector('[data-lang="en"]').click();
+      updateActiveNav();
     });
   </script>
 </body>
